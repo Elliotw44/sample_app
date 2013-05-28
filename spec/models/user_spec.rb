@@ -13,7 +13,7 @@ require 'spec_helper'
 
 describe User do
 
-    before { @user = User.new(name: "Example User", email: "user@example.com", password: "hola", password_confirmation: "hola") }
+    before { @user = User.new(name: "Example User", email: "user@example.com", password: "hola123", password_confirmation: "hola123") }
 
     subject{ @user }
 
@@ -49,6 +49,16 @@ describe User do
         end
         
         it { should_not be_valid }
+    end
+
+    describe "When email is mixed case" do
+        let(:mixed_case_email) { "HElloHoLa@gmaiL.com" }
+
+        it "should be saved as all lower-case" do
+         @user.email = mixed_case_email
+         @user.save
+         @user.reload.email.should == mixed_case_email.downcase
+        end
     end
 
     describe "When password is not present" do
